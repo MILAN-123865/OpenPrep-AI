@@ -457,6 +457,8 @@ const flashcardMasteryRoutes = require('./routes/flashcardMasteryRoutes');
 app.use('/api/flashcard-mastery', flashcardMasteryRoutes);
 const habitTrackerRoutes = require('./routes/habitTrackerRoutes');
 app.use('/api/habits', habitTrackerRoutes);
+const burnoutPreventionRoutes = require('./routes/burnoutPreventionRoutes');
+app.use('/api/burnout', burnoutPreventionRoutes);
 const learningJournalRoutes = require('./routes/learningJournalRoutes');
 app.use('/api/learning-journal', learningJournalRoutes);
 const studyPlanVersioningRoutes = require('./routes/studyPlanVersioningRoutes');

@@ -77,6 +77,7 @@ const LearningPath = require('./LearningPath');
 const NotificationSettings = require('./NotificationSettings');
 const WeaknessReport = require('./WeaknessReport');
 const SecurityAuditLog = require('./SecurityAuditLog');
+const BurnoutAssessment = require('./BurnoutAssessment');
 const MockInterviewSession = require('./MockInterviewSession');
 const ExamIntegrityReport = require('./ExamIntegrityReport');
 const { Bounty, initBounty } = require('./Bounty');
@@ -420,6 +421,10 @@ Exam.hasMany(ExamStrategy, { foreignKey: 'exam', onDelete: 'CASCADE' });ExamStra
 User.hasMany(StudyTip, { foreignKey: 'user', onDelete: 'CASCADE' });
 StudyTip.belongsTo(User, { foreignKey: 'user', as: 'userRef' });
 
+// BurnoutAssessment associations
+User.hasMany(BurnoutAssessment, { foreignKey: 'user', onDelete: 'CASCADE' });
+BurnoutAssessment.belongsTo(User, { foreignKey: 'user', as: 'userRef' });
+
 // DeckRating associations
 DeckRating.belongsTo(User, { foreignKey: 'userId', as: 'userRef' });
 User.hasMany(DeckRating, { foreignKey: 'userId', as: 'ratings', onDelete: 'CASCADE' });
@@ -521,4 +526,5 @@ module.exports = {
   ResumeParseSession,
   MockInterview,
   SalaryNegotiation,
+  BurnoutAssessment,
 };
