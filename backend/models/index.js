@@ -1,6 +1,13 @@
 const { DataTypes, Sequelize } = require('sequelize');
 const { sequelize } = require('../config/db');
 
+ feature/wcag-aaa-overhaul
+const AIUsageLog = require('./AIUsageLog')(sequelize, DataTypes);
+const ProviderHealthStatus = require('./ProviderHealthStatus')(sequelize, DataTypes);
+
+
+
+ main
 /**
  * The model registry: every Sequelize model the backend can reach, wired to
  * the single shared instance and associated in one place.
@@ -56,6 +63,10 @@ const FlashcardSchedulingState = require('./FlashcardSchedulingState');
 const FocusSession = require('./FocusSession');
 const FocusSessionLog = require('./FocusSessionLog');
 const Folder = require('./Folder');
+ feature/wcag-aaa-overhaul
+
+
+ main
 const HandwrittenSubmission = require('./HandwrittenSubmission');
 const LearningPath = require('./LearningPath');
 const MistakeLogEntry = require('./MistakeLogEntry');
@@ -81,7 +92,28 @@ const QuizBookmark = require('./QuizBookmark');
 const QuizTelemetryEvent = require('./QuizTelemetryEvent');
 const QuizValidationLog = require('./QuizValidationLog');
 const ReadinessSnapshot = require('./ReadinessSnapshot');
+ feature/wcag-aaa-overhaul
+const Subject = require('./Subject');
+const SubjectGoal = require('./SubjectGoal');
+const Topic = require('./Topic');
+const StudyPlan = require('./StudyPlan');
+
+const StudyHabit = require('./StudyHabit')(sequelize, DataTypes);
+const HabitLog = require('./HabitLog')(sequelize, DataTypes);
+const HabitStreak = require('./HabitStreak')(sequelize, DataTypes);
+
+
+
+const StudySquad = require('./StudySquad');
+const SquadMember = require('./SquadMember');
+const SquadChallenge = require('./SquadChallenge');
+const SquadChallengeContribution = require('./SquadChallengeContribution');
+
+const MockExamSession = require('./MockExamSession');
+
+ main
 const ResumeParseSession = require('./ResumeParseSession');
+
 const ReviewSubmissionToken = require('./ReviewSubmissionToken');
 const SalaryNegotiation = require('./SalaryNegotiation');
 const SavedSession = require('./SavedSession');
@@ -92,10 +124,17 @@ const SquadAchievement = require('./SquadAchievement');
 const SquadActivity = require('./SquadActivity');
 const SquadActivityReaction = require('./SquadActivityReaction');
 const SquadAuditLog = require('./SquadAuditLog');
+ feature/wcag-aaa-overhaul
+const StudyReminder = require('./StudyReminder');
+const StudyTip = require('./StudyTip');
+
 const SquadChallenge = require('./SquadChallenge');
 const SquadChallengeContribution = require('./SquadChallengeContribution');
 const SquadMember = require('./SquadMember');
+ main
 const StudyGoal = require('./StudyGoal');
+
+
 const StudyGoalProgress = require('./StudyGoalProgress');
 const StudyPlan = require('./StudyPlan');
 const StudyPlanVersion = require('./StudyPlanVersion');
@@ -113,7 +152,15 @@ const User = require('./User');
 const UserBadge = require('./UserBadge');
 const UserPasskey = require('./UserPasskey');
 const UserProgress = require('./UserProgress');
+const User = require('./User');
 const VivaSession = require('./VivaSession');
+ feature/wcag-aaa-overhaul
+
+
+
+const ModeratorAuditLog = require('./ModeratorAuditLog');
+
+ main
 const WeeklyStudyReport = require('./WeeklyStudyReport');
 
 // Models exporting a (sequelize, DataTypes) factory.
@@ -391,6 +438,21 @@ SubjectGoal.belongsTo(User, { foreignKey: 'user', as: 'userRef' });
 User.hasMany(StudySquad, { foreignKey: 'adminUserId', as: 'ownedSquads', onDelete: 'CASCADE' });
 StudySquad.belongsTo(User, { foreignKey: 'adminUserId', as: 'adminRef' });
 
+ feature/wcag-aaa-overhaul
+// StudySquad.hasMany(Whiteboard, { foreignKey: 'squadId', onDelete: 'CASCADE' });
+// Whiteboard.belongsTo(StudySquad, { foreignKey: 'squadId', as: 'squadRef' });
+
+
+User.hasMany(MockExamSession, { foreignKey: 'userId', onDelete: 'CASCADE' });
+MockExamSession.belongsTo(User, { foreignKey: 'userId', as: 'userRef' });
+
+Note.hasMany(NoteLink, { foreignKey: 'sourceNoteId', as: 'outgoingLinks', onDelete: 'CASCADE' });
+Note.hasMany(NoteLink, { foreignKey: 'targetNoteId', as: 'incomingLinks', onDelete: 'CASCADE' });
+NoteLink.belongsTo(Note, { foreignKey: 'sourceNoteId', as: 'sourceNote' });
+NoteLink.belongsTo(Note, { foreignKey: 'targetNoteId', as: 'targetNote' });
+
+
+ main
 StudySquad.hasMany(SquadMember, { foreignKey: 'squadId', onDelete: 'CASCADE' });
 SquadMember.belongsTo(StudySquad, { foreignKey: 'squadId', as: 'squadRef' });
 
