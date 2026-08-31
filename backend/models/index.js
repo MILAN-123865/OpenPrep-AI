@@ -1,7 +1,7 @@
 const { DataTypes, Sequelize } = require('sequelize');
 const { sequelize } = require('../config/db');
 
- feature/ai-weakness-analytics
+ feature/wcag-aaa-overhaul
 const AIUsageLog = require('./AIUsageLog')(sequelize, DataTypes);
 const ProviderHealthStatus = require('./ProviderHealthStatus')(sequelize, DataTypes);
 
@@ -63,7 +63,7 @@ const FlashcardSchedulingState = require('./FlashcardSchedulingState');
 const FocusSession = require('./FocusSession');
 const FocusSessionLog = require('./FocusSessionLog');
 const Folder = require('./Folder');
- feature/ai-weakness-analytics
+ feature/wcag-aaa-overhaul
 
 
  main
@@ -92,7 +92,7 @@ const QuizBookmark = require('./QuizBookmark');
 const QuizTelemetryEvent = require('./QuizTelemetryEvent');
 const QuizValidationLog = require('./QuizValidationLog');
 const ReadinessSnapshot = require('./ReadinessSnapshot');
- feature/ai-weakness-analytics
+ feature/wcag-aaa-overhaul
 const Subject = require('./Subject');
 const SubjectGoal = require('./SubjectGoal');
 const Topic = require('./Topic');
@@ -124,7 +124,7 @@ const SquadAchievement = require('./SquadAchievement');
 const SquadActivity = require('./SquadActivity');
 const SquadActivityReaction = require('./SquadActivityReaction');
 const SquadAuditLog = require('./SquadAuditLog');
- feature/ai-weakness-analytics
+ feature/wcag-aaa-overhaul
 const StudyReminder = require('./StudyReminder');
 const StudyTip = require('./StudyTip');
 
@@ -154,7 +154,7 @@ const UserPasskey = require('./UserPasskey');
 const UserProgress = require('./UserProgress');
 const User = require('./User');
 const VivaSession = require('./VivaSession');
- feature/ai-weakness-analytics
+ feature/wcag-aaa-overhaul
 
 
 
@@ -438,7 +438,7 @@ SubjectGoal.belongsTo(User, { foreignKey: 'user', as: 'userRef' });
 User.hasMany(StudySquad, { foreignKey: 'adminUserId', as: 'ownedSquads', onDelete: 'CASCADE' });
 StudySquad.belongsTo(User, { foreignKey: 'adminUserId', as: 'adminRef' });
 
- feature/ai-weakness-analytics
+ feature/wcag-aaa-overhaul
 // StudySquad.hasMany(Whiteboard, { foreignKey: 'squadId', onDelete: 'CASCADE' });
 // Whiteboard.belongsTo(StudySquad, { foreignKey: 'squadId', as: 'squadRef' });
 
