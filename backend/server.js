@@ -459,6 +459,8 @@ const habitTrackerRoutes = require('./routes/habitTrackerRoutes');
 app.use('/api/habits', habitTrackerRoutes);
 const learningJournalRoutes = require('./routes/learningJournalRoutes');
 app.use('/api/learning-journal', learningJournalRoutes);
+const studyTimeBudgetRoutes = require('./routes/studyTimeBudgetRoutes');
+app.use('/api/time-budgets', studyTimeBudgetRoutes);
 const studyPlanVersioningRoutes = require('./routes/studyPlanVersioningRoutes');
 app.use('/api/study-plans/:planId', studyPlanVersioningRoutes);
 app.use('/api/interviews', mockInterviewRoutes);

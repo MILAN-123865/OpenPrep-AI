@@ -51,6 +51,7 @@ const MindMapViewer = lazy(() => import('./pages/MindMapViewer'));
 const WeaknessDetectionDashboard = lazy(() => import('./pages/WeaknessDetectionDashboard'));
 const StudyPlanner = lazy(() => import('./pages/StudyPlanner'));
 const StudyGoals = lazy(() => import('./pages/StudyGoals'));
+const StudyTimeBudgetDashboard = lazy(() => import('./pages/StudyTimeBudgetDashboard'));
 const VivaSimulator = lazy(() => import('./pages/VivaSimulator'));
 const AttemptHistoryDashboard = lazy(() => import('./pages/AttemptHistoryDashboard'));
 const CollaborativeNoteView = lazy(() => import('./pages/CollaborativeNoteView'));
@@ -401,6 +402,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <StudyGoals />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/time-budgets"
+            element={
+              <ProtectedRoute>
+                <StudyTimeBudgetDashboard />
               </ProtectedRoute>
             }
           />
