@@ -63,6 +63,7 @@ const InterviewRoomPage = lazy(() => import('./pages/InterviewRoomPage'));
 const StudyAnalytics = lazy(() => import('./pages/StudyAnalytics'));
 const ExamCountdownPlanner = lazy(() => import('./pages/ExamCountdownPlanner'));
 const FormulaScratchpad = lazy(() => import('./pages/FormulaScratchpad'));
+const HabitCorrelationDashboard = lazy(() => import('./pages/HabitCorrelationDashboard'));
 
 function App() {
 
@@ -457,6 +458,14 @@ function App() {
           <Route path="/medical-cases" element={<MedicalCaseSimulator />} />
           <Route path="/drug-interactions" element={<DrugInteractionChecker />} />
           <Route path="/exam-countdown" element={<ExamCountdownPlanner />} />
+          <Route
+            path="/habit-insights"
+            element={
+              <ProtectedRoute>
+                <HabitCorrelationDashboard />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/clinical-notes" element={<ClinicalNotesSummarizer />} />
           <Route path="/patient-simulator" element={<PatientSimulator />} />
           <Route path="*" element={<NotFound />} />
