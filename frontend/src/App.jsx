@@ -13,19 +13,22 @@ import SessionRestoreModal from './components/SessionRestoreModal';
 import API from './services/api';
 import QuotaExceededModal from './components/dashboard/QuotaExceededModal';
 import GlobalSearchModal from './components/search/GlobalSearchModal';
-import OfflineBanner from './components/common/OfflineBanner';
+import OfflineBanner from './components/OfflineBanner';
 import OfflineStatusBanner from './components/common/OfflineStatusBanner';
 import PwaInstallPrompt from './components/common/PwaInstallPrompt';
 import OfflineIndicator from './components/common/OfflineIndicator';
 import Walkthrough from './components/tutorial/Walkthrough';
 import MobileBottomNav from './components/common/MobileBottomNav';
 import PomodoroWidget from './components/timer/PomodoroWidget';
+import MicroReviewModal from './components/widgets/MicroReviewModal';
+import { startMicroScheduler, showMicroNotification } from './services/microScheduleWorker';
 import './App.css';
 
 
 
 const Landing = lazy(() => import('./pages/Landing'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
+const PacingCoachDashboard = lazy(() => import('./pages/PacingCoachDashboard'));
 const Register = lazy(() => import('./pages/Register'));
 const Login = lazy(() => import('./pages/Login'));
 const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
@@ -42,6 +45,19 @@ const PublicShare = lazy(() => import('./pages/PublicShare'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const AdminAnalytics = lazy(() => import('./pages/AdminAnalytics'));
 const StudyGroupChat = lazy(() => import('./pages/StudyGroupChat'));
+const StudySquadDashboard = lazy(() => import('./pages/StudySquadDashboard'));
+const CollabNote = lazy(() => import('./pages/CollabNote'));
+const RevisionScheduler = lazy(() => import('./pages/RevisionScheduler'));
+const LiveQuizSession = lazy(() => import('./pages/LiveQuizSession'));
+const StudyAnalytics = lazy(() => import('./pages/StudyAnalytics'));
+const FormulaScratchpad = lazy(() => import('./pages/FormulaScratchpad'));
+const InterviewRoomPage = lazy(() => import('./pages/InterviewRoomPage'));
+const StreakDashboard = lazy(() => import('./pages/StreakDashboard'));
+const MedicalCaseSimulator = lazy(() => import('./pages/MedicalCaseSimulator'));
+const DrugInteractionChecker = lazy(() => import('./pages/DrugInteractionChecker'));
+const ExamCountdownPlanner = lazy(() => import('./pages/ExamCountdownPlanner'));
+const ClinicalNotesSummarizer = lazy(() => import('./pages/ClinicalNotesSummarizer'));
+const PatientSimulator = lazy(() => import('./pages/PatientSimulator'));
 const AiAssistant = lazy(() => import('./pages/AiAssistant'));
 const OAuthCallback = lazy(() => import('./pages/OAuthCallback'));
 const PYQAnalytics = lazy(() => import('./pages/PYQAnalytics'));
@@ -49,21 +65,20 @@ const PYQIntelligenceDashboard = lazy(() => import('./pages/PYQIntelligenceDashb
 const QuizSession = lazy(() => import('./pages/QuizSession'));
 const MindMapViewer = lazy(() => import('./pages/MindMapViewer'));
 const WeaknessDetectionDashboard = lazy(() => import('./pages/WeaknessDetectionDashboard'));
+const MistakeNotebook = lazy(() => import('./pages/MistakeNotebook'));
 const StudyPlanner = lazy(() => import('./pages/StudyPlanner'));
 const StudyGoals = lazy(() => import('./pages/StudyGoals'));
+const StudyTimeBudgetDashboard = lazy(() => import('./pages/StudyTimeBudgetDashboard'));
 const VivaSimulator = lazy(() => import('./pages/VivaSimulator'));
 const AttemptHistoryDashboard = lazy(() => import('./pages/AttemptHistoryDashboard'));
 const CollaborativeNoteView = lazy(() => import('./pages/CollaborativeNoteView'));
 const SquadsPage = lazy(() => import('./pages/SquadsPage'));
-const StudySquadDashboard = lazy(() => import('./pages/SquadsPage'));
-const CollabNote = lazy(() => import('./pages/CollaborativeNoteView'));
-const LiveQuizSession = lazy(() => import('./pages/LiveQuizSession'));
-const MedicalCaseSimulator = lazy(() => import('./pages/MedicalCaseSimulator'));
-const InterviewRoomPage = lazy(() => import('./pages/InterviewRoomPage'));
-const StudyAnalytics = lazy(() => import('./pages/StudyAnalytics'));
-const ExamCountdownPlanner = lazy(() => import('./pages/ExamCountdownPlanner'));
-const FormulaScratchpad = lazy(() => import('./pages/FormulaScratchpad'));
-const HabitCorrelationDashboard = lazy(() => import('./pages/HabitCorrelationDashboard'));
+const BountyBoardPage = lazy(() => import('./pages/BountyBoardPage'));
+const CodeSandboxPage = lazy(() => import('./pages/code/CodeSandboxPage'));
+const RewardsShop = lazy(() => import('./components/gamification/RewardsShop'));
+const OcrSolverPage = lazy(() => import('./pages/ocr/OcrSolverPage'));
+const MarkdownNotesEditor = lazy(() => import('./components/notes/MarkdownNotesEditor'));
+const KnowledgeGraphView = lazy(() => import('./components/notes/KnowledgeGraphView'));
 
 function App() {
 
@@ -71,6 +86,25 @@ function App() {
   const { sessionExpired, aiQuotaExceededUntil, isAuthenticated, user } = useSelector((state) => state.auth);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [savedSessionPrompt, setSavedSessionPrompt] = useState(null);
+  const [isMicroModalOpen, setIsMicroModalOpen] = useState(false);
+
+  // Setup micro-learning trigger and global window handler
+  useEffect(() => {
+    window.openMicroReviewModal = () => setIsMicroModalOpen(true);
+
+    if (isAuthenticated) {
+      const stopScheduler = startMicroScheduler(() => {
+        setIsMicroModalOpen(true);
+        showMicroNotification('OpenPrep AI: Spaced Recall Time!', {
+          body: 'Take 30 seconds for a quick micro-quiz question to keep your study streak alive.',
+        });
+      });
+      return () => {
+        stopScheduler();
+        delete window.openMicroReviewModal;
+      };
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -186,10 +220,12 @@ function App() {
       <Walkthrough />
       <GlobalSearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
       {localStorage.getItem('token') && <PomodoroWidget />}
+      <MicroReviewModal isOpen={isMicroModalOpen} onClose={() => setIsMicroModalOpen(false)} />
       <main id="main-content" tabIndex="-1" role="main" className="focus:outline-none min-h-screen">
         <Suspense fallback={<PageSkeleton />}>
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/pacing-coach" element={<ProtectedRoute><PacingCoachDashboard /></ProtectedRoute>} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/share/:token" element={<PublicShare />} />
@@ -279,6 +315,63 @@ function App() {
             }
           />
           <Route
+            path="/notes/editor"
+            element={
+              <ProtectedRoute>
+                <MarkdownNotesEditor />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/notes/graph"
+            element={
+              <ProtectedRoute>
+                <KnowledgeGraphView />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/code/sandbox"
+            element={
+              <ProtectedRoute>
+                <CodeSandboxPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/code/room/:inviteCode"
+            element={
+              <ProtectedRoute>
+                <CodeSandboxPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/rewards-shop"
+            element={
+              <ProtectedRoute>
+                <RewardsShop />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ocr/solver"
+            element={
+              <ProtectedRoute>
+                <OcrSolverPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mock-exam/:examId"
+            element={
+              <ProtectedRoute>
+                <MockExamArena />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/ai-assistant"
             element={
               <ProtectedRoute>
@@ -310,6 +403,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <PYQIntelligenceDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/mistake-notebook"
+            element={
+              <ProtectedRoute>
+                <MistakeNotebook />
               </ProtectedRoute>
             }
           />
@@ -407,6 +509,15 @@ function App() {
           />
 
           <Route
+            path="/time-budgets"
+            element={
+              <ProtectedRoute>
+                <StudyTimeBudgetDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
             path="/settings"
             element={
               <ProtectedRoute>
@@ -450,6 +561,15 @@ function App() {
             }
           />
 
+          <Route
+            path="/bounties"
+            element={
+              <ProtectedRoute>
+                <BountyBoardPage />
+              </ProtectedRoute>
+            }
+          />
+
           <Route element={<AdminRoute />}>
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/analytics" element={<AdminAnalytics />} />
@@ -473,6 +593,8 @@ function App() {
       </Suspense>
       </main>
       <MobileBottomNav />
+      <OfflineBanner />
+
       {savedSessionPrompt && (
         <SessionRestoreModal
           savedSession={savedSessionPrompt}
@@ -485,3 +607,4 @@ function App() {
 }
 
 export default App;
+
