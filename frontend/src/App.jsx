@@ -76,6 +76,8 @@ const RewardsShop = lazy(() => import('./components/gamification/RewardsShop'));
 const OcrSolverPage = lazy(() => import('./pages/ocr/OcrSolverPage'));
 const MarkdownNotesEditor = lazy(() => import('./components/notes/MarkdownNotesEditor'));
 const KnowledgeGraphView = lazy(() => import('./components/notes/KnowledgeGraphView'));
+const PublicVerifyCertificate = lazy(() => import('./pages/PublicVerifyCertificate'));
+
 
 function App() {
 
@@ -210,6 +212,9 @@ function App() {
           <Route path="/verify-email/:token" element={<VerifyEmail />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/verify/certificate/:certId" element={<PublicVerifyCertificate />} />
+          <Route path="/certificates/verify/:certId" element={<PublicVerifyCertificate />} />
+
 
           <Route
             path="/dashboard"

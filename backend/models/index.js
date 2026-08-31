@@ -1,38 +1,9 @@
 const { DataTypes, Sequelize } = require('sequelize');
 const { sequelize } = require('../config/db');
 
-const User = require('./User');
-const Quiz = require('./Quiz');
 const AIUsageLog = require('./AIUsageLog')(sequelize, DataTypes);
 const ProviderHealthStatus = require('./ProviderHealthStatus')(sequelize, DataTypes);
 
-const SchedulerVersion = require('./SchedulerVersion');
-
-const FlashcardSchedulingState = require('./FlashcardSchedulingState');
-const FlashcardReviewHistory = require('./FlashcardReviewHistory');
-const ReviewSubmissionToken = require('./ReviewSubmissionToken');
-const QuizValidationLog = require('./QuizValidationLog');
-const Folder = require('./Folder');
-const Exam = require('./Exam');
-const Subject = require('./Subject');
-const Topic = require('./Topic');
-const SkillDependency = require('./SkillDependency');
-const ExamStrategy = require('./ExamStrategy');
-const StudyTip = require('./StudyTip');
-const StudyReminder = require('./StudyReminder');
-const AlumniMentorProfile = require('./AlumniMentorProfile');
-const ResumeParseSession = require('./ResumeParseSession');
-const MockInterview = require('./MockInterview');
-const SalaryNegotiation = require('./SalaryNegotiation');
-const PYQ = require('./PYQ');
-
-
-const StudyPlan = require('./StudyPlan');
-const QuizAttempt = require('./QuizAttempt');
-
-const Note = require('./Note');
-const Question = require('./Question');
-const QuestionComment = require('./QuestionComment');
 
 /**
  * The model registry: every Sequelize model the backend can reach, wired to
@@ -89,8 +60,7 @@ const FlashcardSchedulingState = require('./FlashcardSchedulingState');
 const FocusSession = require('./FocusSession');
 const FocusSessionLog = require('./FocusSessionLog');
 const Folder = require('./Folder');
-const HabitLog = require('./HabitLog');
-const HabitStreak = require('./HabitStreak');
+
 const HandwrittenSubmission = require('./HandwrittenSubmission');
 const LearningPath = require('./LearningPath');
 const MistakeLogEntry = require('./MistakeLogEntry');
@@ -115,7 +85,11 @@ const QuizBookmark = require('./QuizBookmark');
 const QuizTelemetryEvent = require('./QuizTelemetryEvent');
 const QuizValidationLog = require('./QuizValidationLog');
 const ReadinessSnapshot = require('./ReadinessSnapshot');
+const Subject = require('./Subject');
 const SubjectGoal = require('./SubjectGoal');
+const Topic = require('./Topic');
+const StudyPlan = require('./StudyPlan');
+
 const StudyHabit = require('./StudyHabit')(sequelize, DataTypes);
 const HabitLog = require('./HabitLog')(sequelize, DataTypes);
 const HabitStreak = require('./HabitStreak')(sequelize, DataTypes);
@@ -127,7 +101,9 @@ const SquadMember = require('./SquadMember');
 const SquadChallenge = require('./SquadChallenge');
 const SquadChallengeContribution = require('./SquadChallengeContribution');
 
+const MockExamSession = require('./MockExamSession');
 const ResumeParseSession = require('./ResumeParseSession');
+
 const ReviewSubmissionToken = require('./ReviewSubmissionToken');
 const SalaryNegotiation = require('./SalaryNegotiation');
 const SavedSession = require('./SavedSession');
@@ -138,7 +114,11 @@ const SquadAchievement = require('./SquadAchievement');
 const SquadActivity = require('./SquadActivity');
 const SquadActivityReaction = require('./SquadActivityReaction');
 const SquadAuditLog = require('./SquadAuditLog');
+const StudyReminder = require('./StudyReminder');
+const StudyTip = require('./StudyTip');
 const StudyGoal = require('./StudyGoal');
+
+
 const StudyGoalProgress = require('./StudyGoalProgress');
 const StudyPlanVersion = require('./StudyPlanVersion');
 const StudyTask = require('./StudyTask');
@@ -147,7 +127,11 @@ const SyllabusTopic = require('./SyllabusTopic');
 const UsageQuota = require('./UsageQuota');
 const UserBadge = require('./UserBadge');
 const UserProgress = require('./UserProgress');
+const User = require('./User');
 const VivaSession = require('./VivaSession');
+
+
+
 const ModeratorAuditLog = require('./ModeratorAuditLog');
 const WeeklyStudyReport = require('./WeeklyStudyReport');
 const StudyMilestone = require('./StudyMilestone')(sequelize, DataTypes);
@@ -418,8 +402,9 @@ SubjectGoal.belongsTo(User, { foreignKey: 'user', as: 'userRef' });
 User.hasMany(StudySquad, { foreignKey: 'adminUserId', as: 'ownedSquads', onDelete: 'CASCADE' });
 StudySquad.belongsTo(User, { foreignKey: 'adminUserId', as: 'adminRef' });
 
-StudySquad.hasMany(Whiteboard, { foreignKey: 'squadId', onDelete: 'CASCADE' });
-Whiteboard.belongsTo(StudySquad, { foreignKey: 'squadId', as: 'squadRef' });
+// StudySquad.hasMany(Whiteboard, { foreignKey: 'squadId', onDelete: 'CASCADE' });
+// Whiteboard.belongsTo(StudySquad, { foreignKey: 'squadId', as: 'squadRef' });
+
 
 User.hasMany(MockExamSession, { foreignKey: 'userId', onDelete: 'CASCADE' });
 MockExamSession.belongsTo(User, { foreignKey: 'userId', as: 'userRef' });
