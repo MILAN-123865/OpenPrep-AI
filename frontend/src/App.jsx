@@ -578,6 +578,14 @@ function App() {
           <Route path="/medical-cases" element={<MedicalCaseSimulator />} />
           <Route path="/drug-interactions" element={<DrugInteractionChecker />} />
           <Route path="/exam-countdown" element={<ExamCountdownPlanner />} />
+          <Route
+            path="/habit-insights"
+            element={
+              <ProtectedRoute>
+                <HabitCorrelationDashboard />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/clinical-notes" element={<ClinicalNotesSummarizer />} />
           <Route path="/patient-simulator" element={<PatientSimulator />} />
           <Route path="*" element={<NotFound />} />
